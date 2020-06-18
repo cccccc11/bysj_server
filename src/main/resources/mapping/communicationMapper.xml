@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bysjserver.server.dao.CommunicationDao">
+
+    <insert id="addCommunication" parameterType="bysjserver.server.bean.Communication" useGeneratedKeys="true" keyProperty="id">
+
+        insert into communication
+        (userId,date,title,content)
+        values
+        (#{userId},CURRENT_TIME,#{title},#{content})
+
+    </insert>
+
+    <select id="getAllCommunication" resultType="java.util.Map">
+        SELECT c.*, u.id userId,u.`name`,u.head
+        FROM communication as c LEFT JOIN `user` as u ON c.userId = u.id
+        ORDER BY c.id DESC
+    </select>
+
+    <select id="getCommentNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(id)
+        FROM comment
+        WHERE communicationId = #{communicationId}
+    </select>
+
+    <select id="getCommunication" resultType="java.util.Map">
+        SELECT c.*,u.`name`,u.head
+        FROM communication as c LEFT JOIN user as u ON c.userId = u.id
+        WHERE c.id = #{communicationId}
+    </select>
+
+    <select id="getAllComment" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT comment.*,user.`name`,user.head
+        FROM comment LEFT JOIN user ON comment.userId = `user`.id
+        WHERE comment.communicationId = #{communicationId}
+        ORDER BY id
+    </select>
+
+    <insert id="addComment" parameterType="bysjserver.server.bean.Comment">
+        INSERT INTO comment
+        (communicationId,userId,date,content)
+        VALUES
+        (#{communicationId},#{userId},CURRENT_TIME,#{content})
+    </insert>
+
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bysjserver.server.dao.UserDao">
+
+    <select id="hasUser" resultType="java.lang.String" parameterType="java.lang.String">
+        select id
+        from user
+        where id=#{id}
+    </select>
+
+
+    <insert id="addUser">
+        insert into user
+        values (#{id},'',#{password},'','1900-01-01','','','',"0")
+    </insert>
+
+    <insert id="addUserWithPhone">
+        insert into user
+        values (#{id},'',#{password},'','1900-01-01',#{phone},'','',"0")
+    </insert>
+
+
+    <select id="login" parameterType="java.lang.String" resultType="bysjserver.server.bean.User">
+        select *
+        from user
+        where id=#{id} and password=#{password}
+    </select>
+
+    <update id="updateName" parameterType="java.lang.String">
+        update user
+        set name = #{newName}
+        where id = #{id}
+    </update>
+
+    <update id="updatePhone" parameterType="java.lang.String">
+        update user
+        set phone = #{newPhone}
+        where id = #{id}
+    </update>
+
+    <update id="updateAddress" parameterType="java.lang.String">
+        update user
+        set address = #{newAddress}
+        where id = #{id}
+    </update>
+
+    <update id="updateBirthday" >
+        update user
+        set birthday = #{newDate}
+        where id = #{id}
+    </update>
+
+    <update id="updateSex" parameterType="java.lang.String">
+        update user
+        set sex = #{newSex}
+        where id = #{id}
+    </update>
+
+    <update id="updatePassword" parameterType="java.lang.String">
+        update user
+        set password = #{newPassword}
+        where id = #{id}
+    </update>
+
+    <update id="updateHeadPath" parameterType="java.lang.String">
+        update user
+        set head = #{path}
+        where id = #{id}
+    </update>
+
+    <select id="getAllCommodities" resultType="java.util.Map">
+        SELECT c.*,s.`name` shopname
+        FROM commodity as c
+        left join shop as s on c.shopId = s.id
+        where c.state = 1
+    </select>
+
+    <select id="searchCommodities" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT c.*,s.`name` shopname
+        FROM commodity as c
+        left join shop as s on c.shopId = s.id
+        where c.state = 1 AND c.name LIKE CONCAT('%',#{searchStr},'%')
+    </select>
+
+    <select id="getPhoneNumber" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT phone
+        FROM `user`
+        WHERE id = #{username}
+    </select>
+</mapper>

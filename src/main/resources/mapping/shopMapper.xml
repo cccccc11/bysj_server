@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bysjserver.server.dao.ShopDao">
+
+    <select id="hasShop" resultType="java.lang.String" parameterType="java.lang.String">
+        select id
+        from shop
+        where id = #{id}
+    </select>
+
+    <insert id="addShop">
+        insert into shop
+        values (#{id},#{password},null,null,null,null,"0")
+    </insert>
+
+    <insert id="addShopWithPhone">
+        insert into shop
+        values (#{id},#{password},null,null,#{phone},null,"0")
+    </insert>
+
+
+    <select id="shopLogin" resultType="bysjserver.server.bean.Shop" parameterType="java.lang.String">
+        select *
+        from shop
+        where id=#{id} and password=#{password}
+    </select>
+
+    <update id="changeName" parameterType="java.lang.String" >
+        update shop
+        set name = #{newName}
+        where id = #{id}
+    </update>
+
+    <update id="changeAddress" parameterType="java.lang.String">
+        update shop
+        set address = #{newAddress}
+        where id = #{id}
+    </update>
+
+    <update id="changePhone" parameterType="java.lang.String">
+        update shop
+        set phone = #{newPhone}
+        where id = #{id}
+    </update>
+
+    <update id="changePassword" parameterType="java.lang.String">
+        update shop
+        set password = #{newPassword}
+        where id = #{id}
+    </update>
+
+    <update id="changeHead" parameterType="java.lang.String">
+        update shop
+        set head = #{path}
+        where id = #{id}
+    </update>
+
+    <select id="getPhone" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT phone
+        FROM `shop`
+        WHERE id = #{username}
+    </select>
+</mapper>

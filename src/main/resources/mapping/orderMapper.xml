@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bysjserver.server.dao.OrderDao">
+
+    <select id="commodityNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select SUM(num)
+        from orders
+        where commodityId = #{commodityId}
+    </select>
+
+    <select id="hasPay" resultType="java.lang.Integer">
+        select SUM(userId)
+        from orders
+        where userId = #{userId} and commodityId = #{commodityId}
+    </select>
+
+    <insert id="addOrder">
+        insert into orders
+        values (#{userId},#{commodityId},#{num},'0')
+    </insert>
+
+    <select id="getOrders" resultType="java.util.Map">
+    SELECT orders.num,orders.state orderState,commodity.*,shop.`name` shopname
+    FROM orders
+    LEFT JOIN commodity on orders.commodityId = commodity.id
+    LEFT JOIN shop ON commodity.shopId = shop.id
+    WHERE orders.userId = #{userId}
+    </select>
+
+    <delete id="deleteOrder" >
+        DELETE
+        FROM orders
+        WHERE userId = #{userId} AND commodityId = #{commodityId}
+    </delete>
+
+    <select id="commodityTotalNum" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT number
+        FROM  commodity
+        WHERE id = #{commodityID}
+    </select>
+
+    <select id="getAllOrdersByCommodityId" resultType="java.util.Map" parameterType="java.lang.Integer">
+        SELECT u.id,u.`name`,u.phone,u.address,orders.num,orders.state
+        FROM orders LEFT JOIN user as u ON orders.userId = u.id
+        WHERE orders.commodityId = #{commodityId}
+    </select>
+
+    <update id="updateOrderState">
+        UPDATE orders
+        SET state = #{state}
+        WHERE userId = #{userId} AND commodityId = #{commodityId}
+    </update>
+
+    <select id="finishOrder" resultType="java.lang.Integer">
+        SELECT COUNT(userId)
+        FROM orders
+        WHERE commodityId = #{commodityId} AND state = '0'
+    </select>
+</mapper>

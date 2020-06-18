@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bysjserver.server.dao.ShoppingCartDao">
+
+    <select id="hasAddToShoppingCart" resultType="java.lang.Integer">
+        select SUM(userId)
+        from shoppingcart
+        where userId = #{userId} and commodityId = #{commodityId}
+    </select>
+
+    <insert id="addToShoppingCart">
+        insert into shoppingcart
+        values (#{userId},#{commodityId},#{num})
+    </insert>
+
+    <delete id="deleteShoppingCart">
+        delete
+        from shoppingcart
+        where userId = #{userId} and commodityId = #{commodityId}
+    </delete>
+
+    <select id="getMyShoppingCart" resultType="java.util.Map">
+        select c.*,shop.`name` shopname
+        from shoppingcart as s left join commodity as c on s.commodityId = c.id
+				LEFT JOIN shop ON shopId = shop.id
+        where userId = #{userId}
+    </select>
+
+</mapper>
